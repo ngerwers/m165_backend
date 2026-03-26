@@ -5,7 +5,7 @@ import subprocess
 
 car_models_bp = Blueprint("car_models", __name__)
 
-# --- KONFIGURATION FÜR BACKUP-TOOLS ---
+#KONFIGURATION FÜR BACKUP-TOOLS
 # Wenn im System-PATH registriert, reicht der Name. Sonst voller Pfad zur .exe
 MONGODUMP_EXE = "mongodump"
 MONGORESTORE_EXE = "mongorestore"
@@ -22,13 +22,13 @@ def serialize(c):
         c["manufacturer_id"] = str(c["manufacturer_id"])
     return c
 
-# ── GET ALL ──────────────────────────────────────────────────
+#GET ALL
 @car_models_bp.route("/car_models", methods=["GET"])
 def get_car_models():
     db = get_db()
     return jsonify([serialize(c) for c in db.car_models.find()])
 
-# ── GET ONE ──────────────────────────────────────────────────
+#GET ONE
 @car_models_bp.route("/car_models/<id>", methods=["GET"])
 def get_car_model(id):
     db = get_db()
@@ -37,35 +37,35 @@ def get_car_model(id):
         return jsonify({"error": "Car model not found"}), 404
     return jsonify(serialize(c))
 
-# ── GET BY CATEGORY ──────────────────────────────────────────
+#GET BY CATEGORY
 @car_models_bp.route("/car_models/category/<cat>", methods=["GET"])
 def get_by_category(cat):
     db = get_db()
     results = list(db.car_models.find({"cat": cat}))
     return jsonify([serialize(c) for c in results])
 
-# ── GET BY DRIVE TYPE (AWD / RWD / FWD) ──────────────────────
+#GET BY DRIVE TYPE (AWD / RWD / FWD)
 @car_models_bp.route("/car_models/drive/<drive>", methods=["GET"])
 def get_by_drive(drive):
     db = get_db()
     results = list(db.car_models.find({"specs.drive": drive}))
     return jsonify([serialize(c) for c in results])
 
-# ── GET BY COLOR ─────────────────────────────────────────────
+#GET BY COLOR
 @car_models_bp.route("/car_models/color/<color>", methods=["GET"])
 def get_by_color(color):
     db = get_db()
     results = list(db.car_models.find({"colors": color}))
     return jsonify([serialize(c) for c in results])
 
-# ── GET BY MAX PRICE ─────────────────────────────────────────
+#GET BY MAX PRICE 
 @car_models_bp.route("/car_models/price/<int:max_price>", methods=["GET"])
 def get_by_max_price(max_price):
     db = get_db()
     results = list(db.car_models.find({"price": {"$lte": max_price}}))
     return jsonify([serialize(c) for c in results])
 
-# ── GET ONE CAR WITH FULL DETAILS (joined manufacturer + engine) ─────
+#GET ONE CAR WITH FULL DETAILS
 @car_models_bp.route("/car_models/<id>/details", methods=["GET"])
 def get_car_details(id):
     db = get_db()
@@ -99,7 +99,7 @@ def get_car_details(id):
         c["manufacturer"]["car_model_ids"] = [str(i) for i in c["manufacturer"]["car_model_ids"]]
     return jsonify(c)
 
-# ── GET ALL WITH FULL DETAILS (joined) ───────────────────────
+#GET ALL WITH FULL DETAILS (joined)
 @car_models_bp.route("/car_models/details", methods=["GET"])
 def get_all_car_details():
     db = get_db()
@@ -130,7 +130,7 @@ def get_all_car_details():
             c["manufacturer"]["car_model_ids"] = [str(i) for i in c["manufacturer"]["car_model_ids"]]
     return jsonify(results)
 
-# ── CREATE ───────────────────────────────────────────────────
+#CREATE
 @car_models_bp.route("/car_models", methods=["POST"])
 def create_car_model():
     db = get_db()
@@ -149,7 +149,7 @@ def create_car_model():
     )
     return jsonify({"id": str(result.inserted_id)}), 201
 
-# ── UPDATE ───────────────────────────────────────────────────
+#UPDATE
 @car_models_bp.route("/car_models/<id>", methods=["PUT"])
 def update_car_model(id):
     db = get_db()
@@ -164,7 +164,7 @@ def update_car_model(id):
         return jsonify({"error": "Car model not found"}), 404
     return jsonify({"status": "updated"})
 
-# ── DELETE ───────────────────────────────────────────────────
+#DELETE
 @car_models_bp.route("/car_models/<id>", methods=["DELETE"])
 def delete_car_model(id):
     db = get_db()
@@ -179,7 +179,7 @@ def delete_car_model(id):
     )
     return jsonify({"status": "deleted"})
 
-# ── ADMIN: BACKUP ─────────────────────────────────────────────
+#ADMIN: BACKUP
 @car_models_bp.route("/admin/backup", methods=["POST"])
 def admin_backup():
     """Erstellt ein physisches Backup mit mongodump (Vorgabe Dokumentation)"""
@@ -194,7 +194,7 @@ def admin_backup():
     except Exception as e:
         return jsonify({"error": "Backup fehlgeschlagen. Prüfe PATH oder Berechtigungen.", "details": str(e)}), 500
 
-# ── ADMIN: NUKE (Daten löschen für Restore-Test) ─────────────
+#ADMIN: NUKE (Daten löschen für Restore-Test)
 @car_models_bp.route("/admin/nuke", methods=["DELETE"])
 def admin_nuke():
     """Löscht alle Car-Modelle (Simuliert Datenverlust/Ransomware)"""
@@ -202,7 +202,7 @@ def admin_nuke():
     result = db.car_models.delete_many({})
     return jsonify({"msg": "Datenbank geleert", "deleted_count": result.deleted_count}), 200
 
-# ── ADMIN: RESTORE ────────────────────────────────────────────
+#ADMIN: RESTORE
 @car_models_bp.route("/admin/restore", methods=["POST"])
 def admin_restore():
     """Wiederherstellung mit mongorestore --drop (Vorgabe Dokumentation)"""

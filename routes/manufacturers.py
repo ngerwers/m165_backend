@@ -23,14 +23,14 @@ def serialize_car(c):
     return c
 
 
-# ── GET ALL ──────────────────────────────────────────────────
+#GET ALL
 @manufacturers_bp.route("/manufacturers", methods=["GET"])
 def get_manufacturers():
     db = get_db()
     return jsonify([serialize(m) for m in db.manufacturers.find()])
 
 
-# ── GET ONE ──────────────────────────────────────────────────
+#GET ONE
 @manufacturers_bp.route("/manufacturers/<id>", methods=["GET"])
 def get_manufacturer(id):
     db = get_db()
@@ -40,7 +40,7 @@ def get_manufacturer(id):
     return jsonify(serialize(m))
 
 
-# ── GET BY COUNTRY ───────────────────────────────────────────
+#GET BY COUNTRY
 @manufacturers_bp.route("/manufacturers/country/<country>", methods=["GET"])
 def get_by_country(country):
     db = get_db()
@@ -48,7 +48,7 @@ def get_by_country(country):
     return jsonify([serialize(m) for m in results])
 
 
-# ── GET ALL CARS FROM THIS MANUFACTURER ──────────────────────
+#GET ALL CARS FROM THIS MANUFACTURER
 @manufacturers_bp.route("/manufacturers/<id>/cars", methods=["GET"])
 def get_cars_by_manufacturer(id):
     db = get_db()
@@ -58,7 +58,7 @@ def get_cars_by_manufacturer(id):
     return jsonify([serialize_car(c) for c in cars])
 
 
-# ── CREATE ───────────────────────────────────────────────────
+#CREATE
 @manufacturers_bp.route("/manufacturers", methods=["POST"])
 def create_manufacturer():
     db = get_db()
@@ -71,7 +71,7 @@ def create_manufacturer():
     return jsonify({"id": str(result.inserted_id)}), 201
 
 
-# ── UPDATE ───────────────────────────────────────────────────
+#UPDATE
 @manufacturers_bp.route("/manufacturers/<id>", methods=["PUT"])
 def update_manufacturer(id):
     db = get_db()
@@ -83,7 +83,7 @@ def update_manufacturer(id):
     return jsonify({"status": "updated"})
 
 
-# ── DELETE ───────────────────────────────────────────────────
+#DELETE
 @manufacturers_bp.route("/manufacturers/<id>", methods=["DELETE"])
 def delete_manufacturer(id):
     db = get_db()

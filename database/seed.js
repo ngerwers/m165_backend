@@ -68,11 +68,11 @@ db.engines.find().forEach(e => { engMap[e.code] = e._id; });
 
 
 // ─── 3. CAR_MODELS (Haupt-Collection) ───────────────────────
-// engine_id        → Fremdschlüssel zu engines      ✅
-// manufacturer_id  → Fremdschlüssel zu manufacturers ✅
-// colors           → Array                           ✅
-// specs            → eingebettetes Dokument          ✅
-// Nicht alle Dokumente gleich (range_km nur bei EVs) ✅
+// engine_id        → Fremdschlüssel zu engines      
+// manufacturer_id  → Fremdschlüssel zu manufacturers 
+// colors           → Array                           
+// specs            → eingebettetes Dokument          
+// Nicht alle Dokumente gleich (range_km nur bei EVs) 
 db.car_models.insertMany([
   {
     "model": "911 Turbo S", "year": 2024, "cat": "Sport", "price": 270000,
@@ -227,7 +227,7 @@ db.car_models.find().forEach(car => {
 
 
 // ─── DONE ────────────────────────────────────────────────────
-print("✅ Seed erfolgreich!");
+print(" Seed erfolgreich!");
 print("   manufacturers: " + db.manufacturers.countDocuments());
 print("   engines:       " + db.engines.countDocuments());
 print("   car_models:    " + db.car_models.countDocuments());

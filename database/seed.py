@@ -103,7 +103,7 @@ def seed_db():
             {"$push": {"car_model_ids": car["_id"]}}
         )
 
-    print("✅ Seed erfolgreich abgeschlossen!")
+    print(" Seed erfolgreich abgeschlossen!")
     print(f"   Manufacturers: {db.manufacturers.count_documents({})}")
     print(f"   Engines:       {db.engines.count_documents({})}")
     print(f"   Car Models:    {db.car_models.count_documents({})}")
